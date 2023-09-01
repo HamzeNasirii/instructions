@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+    <h1>لیست محتوا</h1>
+    <form method="get" class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="search" class="sr-only">جستجو:</label>
+            <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" id="search"
+                   placeholder="جستجو">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="type" class="sr-only">نوع دستورالعمل:</label>
+            <select name="type" class="form-control" id="type">
+                {% for value, label in type_choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="start_date" class="sr-only">از تاریخ:</label>
+            <input type="date" name="start_date" value="{{ request.GET.start_date }}" class="form-control"
+                   id="start_date">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="end_date" class="sr-only">تا تاریخ:</label>
+            <input type="date" name="end_date" value="{{ request.GET.end_date }}" class="form-control" id="end_date">
+        </div>
+        {% if user.is_superuser %}
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="status" class="sr-only">وضعیت:</label>
+                <select name="status" class="form-control" id="status">
+                    <option value="">همه وضعیت‌ها</option>
+                    <option value="pub">منتشر شده</option>
+                    <option value="drf">پیشنویس</option>
+                </select>
+            </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary mb-2">جستجو</button>
+    </form>
+
+    <br><br>
+    {% if instructions %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>User</th>
+                <th>نوع</th>
+                <th>ش.نامه</th>
+                <th>موضوع</th>
+                <th>ضمیمه</th>
+                <th>برای مراقب سلامت</th>
+                <th>برای کارشناس</th>
+                <th hidden="hidden">Is Active</th>
+                {#                <th>عملیات</th>#}
+                <th>وضعیت</th>
+                <th>تاریخ ویرایش</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for instruction in instructions %}
+                {% if not instruction.is_active %}
+                    {% if instruction.status == 'pub' or user.is_superuser %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ instruction.user.username }}</td>
+                            <td>{{ instruction.type }}</td>
+                            <td>{{ instruction.number }}</td>
+                            <td>
+                                <a class="text-info"
+                                   href="{% url 'instruction_detail' instruction.id %}">{{ instruction.title }}</a>
+                                {% if instruction.datetime_created > last_visited %}
+                                    <td>
+                                        <strong class="new-item">جدید</strong>
+                                    </td>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ instruction.instruction_attach.count }}
+                            </td>
+                            <td>{% if instruction.for_behvarz %}Yes{% else %}No{% endif %}</td>
+                            <td>{% if instruction.for_expert %}Yes{% else %}No{% endif %}</td>
+                            <td hidden="hidden">{% if instruction.is_active %}Yes{% else %}No{% endif %}</td>
+                            {#                    <td>#}
+                            {##}
+                            {#                        {% if instruction.status == 'drf' and instruction.user == request.user or user.is_superuser %}#}
+                            {#                            <span>#}
+                            {#                            <a class="text-green" href="{% url 'instruction_update' instruction.id %}">#}
+                            {#                            <i style="font-size:16px;color: darkred" class="fa">&#xf044;</i>#}
+                            {#                            </a>#}
+                            {#                        {% endif %}#}
+                            {#                    <span>|</span>#}
+                            {#                        {% if user.is_superuser or instruction.user == request.user %}#}
+                            {#                            <a class="text-danger" href="{% url 'instruction_delete' instruction.id %}">#}
+                            {#                                <i style="font-size:16px;color:darkred" class="fa">&#xf00d;</i>#}
+                            {#                            </a>#}
+                            {#                            </span>#}
+                            {#                        {% endif %}#}
+                            {#                                            <span>|</span>#}
+                            {#                                            <a class="text-info" href="{% url 'instruction_detail' instruction.id %}">جزئیات</a></td>#}
+                            {#                    <td>#}
+                            <td>
+                                {% if instruction.status == 'pub' %}
+                                    <span class="badge badge-success">منتشر شده</span>
+                                {% else %}
+                                    <span class="badge badge-info">پیشنویس</span>
+                                {% endif %}
+                                {% if not instruction.is_active %}
+                                    <span class="badge badge-danger">حذف شده</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ instruction.datetime_updated }}</td>
+                            {% if instruction.datetime_created > last_visited %}
+                                <td><strong>جدید</strong></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        </tr>
+
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="12">This is the footer of the table</td>
+            </tr>
+            </tfoot>
+        </table>
+    {% else %}
+        <p>محتوایی برای نمایش وجود ندارد.</p>
+    {% endif %}
+{% endblock %}

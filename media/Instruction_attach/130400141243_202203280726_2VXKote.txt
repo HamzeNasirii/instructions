@@ -1,0 +1,362 @@
+Device: Q-tag Fridge-tag 2
+Vers: 0.5
+Fw Vers: 3.4p0o
+Sensor: 1
+Conf:
+ Serial: 130400141243
+ PCB: BG0211306532
+ CID: 1000
+ Lot: 1792_20_08
+ Zone: 0.00
+ Measurement delay: 10
+ Moving Avrg: 1
+ User Alarm Config: 0
+ User Clock Config: 1
+ Alarm Indication: 0
+ Temp unit: C
+ Alarm:
+  0:
+   T AL: -0.5, t AL: 60
+  1:
+   T AL: +8.0, t AL: 600
+ Int Sensor:
+  Timeout: 1, Offset: +0.0
+ Report history length: 60
+ Det Report: 3
+ Use ext devices: 0
+ Test Res: 1, Test TS: 2021-05-20 12:51
+Hist:
+ TS Actv: 2022-03-05 11:09
+ TS Report Creation: 2022-03-28 07:26
+ 1:
+  Date: 2022-03-28
+  Min T: +3.2, TS Min T: 05:24
+  Max T: +3.5, TS Max T: 00:00
+  Avrg T: +3.3
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 8
+  Checked:
+   TS AM: 07:20
+ 2:
+  Date: 2022-03-27
+  Min T: +2.9, TS Min T: 06:02
+  Max T: +3.8, TS Max T: 17:13
+  Avrg T: +3.2
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 3:
+  Date: 2022-03-26
+  Min T: +2.3, TS Min T: 01:57
+  Max T: +3.3, TS Max T: 16:49
+  Avrg T: +2.8
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 4:
+  Date: 2022-03-25
+  Min T: +2.1, TS Min T: 01:07
+  Max T: +2.8, TS Max T: 16:04
+  Avrg T: +2.4
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 5:
+  Date: 2022-03-24
+  Min T: +1.8, TS Min T: 01:35
+  Max T: +2.5, TS Max T: 18:48
+  Avrg T: +2.1
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 6:
+  Date: 2022-03-23
+  Min T: +1.7, TS Min T: 09:23
+  Max T: +2.2, TS Max T: 16:23
+  Avrg T: +1.9
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 7:
+  Date: 2022-03-22
+  Min T: +2.0, TS Min T: 06:18
+  Max T: +2.3, TS Max T: 00:09
+  Avrg T: +2.0
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 8:
+  Date: 2022-03-21
+  Min T: +2.2, TS Min T: 21:03
+  Max T: +2.8, TS Max T: 00:00
+  Avrg T: +2.4
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 9:
+  Date: 2022-03-20
+  Min T: +2.7, TS Min T: 23:40
+  Max T: +3.1, TS Max T: 12:47
+  Avrg T: +2.9
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 10:
+  Date: 2022-03-19
+  Min T: +3.0, TS Min T: 06:10
+  Max T: +4.1, TS Max T: 10:59
+  Avrg T: +3.2
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 11:
+  Date: 2022-03-18
+  Min T: +2.8, TS Min T: 05:37
+  Max T: +3.6, TS Max T: 16:54
+  Avrg T: +3.2
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 12:
+  Date: 2022-03-17
+  Min T: +3.1, TS Min T: 21:34
+  Max T: +4.6, TS Max T: 10:35
+  Avrg T: +3.4
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 13:
+  Date: 2022-03-16
+  Min T: +3.5, TS Min T: 21:44
+  Max T: +4.2, TS Max T: 12:21
+  Avrg T: +3.7
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 14:
+  Date: 2022-03-15
+  Min T: +3.7, TS Min T: 07:28
+  Max T: +5.2, TS Max T: 08:21
+  Avrg T: +3.9
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 8
+  Checked:
+   TS AM: 08:08
+ 15:
+  Date: 2022-03-14
+  Min T: +4.0, TS Min T: 20:45
+  Max T: +5.3, TS Max T: 09:01
+  Avrg T: +4.2
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 16:
+  Date: 2022-03-13
+  Min T: +4.1, TS Min T: 11:42
+  Max T: +4.8, TS Max T: 01:32
+  Avrg T: +4.4
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 17:
+  Date: 2022-03-12
+  Min T: +4.1, TS Min T: 14:05
+  Max T: +4.9, TS Max T: 21:34
+  Avrg T: +4.6
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 18:
+  Date: 2022-03-11
+  Min T: +4.2, TS Min T: 06:22
+  Max T: +4.9, TS Max T: 15:38
+  Avrg T: +4.5
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 19:
+  Date: 2022-03-10
+  Min T: +3.8, TS Min T: 00:05
+  Max T: +5.1, TS Max T: 10:27
+  Avrg T: +4.1
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 20:
+  Date: 2022-03-09
+  Min T: +3.3, TS Min T: 06:05
+  Max T: +4.0, TS Max T: 12:03
+  Avrg T: +3.6
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 21:
+  Date: 2022-03-08
+  Min T: +3.3, TS Min T: 05:16
+  Max T: +4.1, TS Max T: 08:48
+  Avrg T: +3.7
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 8
+  Checked:
+   TS AM: 08:36
+ 22:
+  Date: 2022-03-07
+  Min T: +3.7, TS Min T: 23:41
+  Max T: +4.5, TS Max T: 00:00
+  Avrg T: +4.1
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 0
+ 23:
+  Date: 2022-03-06
+  Min T: +4.0, TS Min T: 04:03
+  Max T: +7.1, TS Max T: 08:54
+  Avrg T: +4.5
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 0
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 8
+  Checked:
+   TS AM: 08:43
+ 24:
+  Date: 2022-03-05
+  Min T: +4.3, TS Min T: 23:23
+  Max T: +14.9, TS Max T: 11:23
+  Avrg T: +5.0
+  Alarm:
+   0:
+    t Acc: 0
+   1:
+    t Acc: 31
+  Int Sensor timeout:
+   t AccST: 0
+  Events: 24
+  Checked:
+   TS AM: 11:09
+   TS PM: 12:45
+Cert:
+ Vers: 1.0
+ Lot: 1792_20_08
+ Issuer: Berlinger & Co. AG
+ Valid from: 2020-08-21 07:39
+ Owner: Berlinger & Co. AG
+ Public Key: d73cd26b379bd0a250d98498e15c739ab53594e9768b247a0713637cba30e474b4fcc1aae45f30ec7cc878c102cf9648d775670d2f93b48726a0f21d3ca71074
+Sig Cert: 6eef7b154b51a1f4a4186e76b495d43dc25cedbaab8b18486895df5d773530795679b8aa3678e511e45e28cb894bcc051dd90d13f19f699c4f42b46c4ed5d621
+Sig: ec3ca65a802abce36aacf3e12679075acf05c8f55586e79c16a489c59ac4f3b975f34b4d1596a2083a31b1f6172bcca388463a95e4f2ed63bdc5808433fb6820
