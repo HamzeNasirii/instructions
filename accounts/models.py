@@ -63,7 +63,7 @@ class CustomUser(AbstractUser):
     birthday = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=5, choices=GENDER_CHOICES, blank=True, null=True)
     education = models.CharField(max_length=20, choices=EDU_CHOICES, null=True, blank=True)
-    photo = models.ImageField(upload_to='accounts/user_photos/', blank=True, null=True)
+    photo = models.ImageField(upload_to='accounts/users_avatar/', blank=True, null=True)
 
     cell_phone = models.IntegerField(blank=True, null=True)
 
