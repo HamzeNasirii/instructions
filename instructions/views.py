@@ -121,10 +121,10 @@ class InsUpdateView(LoginRequiredMixin, UpdateView):
             instance = form.save(commit=False)
 
             # Delete selected attachments
-            attachments = self.request.POST.getlist('delete-checkbox')
-            print("Selected attachments:", attachments)
+            attachments_get = self.request.POST.getlist('selected_attachments')
+            print("Selected attachments:", attachments_get)
             print("Instance:", instance)
-            attachments_to_delete = Attachment.objects.filter(id__in=attachments, ins_attach=instance)
+            attachments_to_delete = Attachment.objects.filter(id__in=attachments_get, ins_attach=instance)
             print("Attachments to delete:", attachments_to_delete)
             for attachment in attachments_to_delete:
                 # Delete the file from storage
@@ -133,6 +133,12 @@ class InsUpdateView(LoginRequiredMixin, UpdateView):
                 default_storage.delete(file_path)
                 # Delete the attachment
                 attachment.delete()
+
+            # Handle uploaded files
+            uploaded_files = self.request.FILES.getlist('attachment')  # نام فیلد مربوط به آپلود فایل را وارد کنید
+            for uploaded_file in uploaded_files:
+                attachment = Attachment(file=uploaded_file, ins_attach=instance)
+                attachment.save()
 
             instance.save()
 
