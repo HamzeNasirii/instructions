@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load jalali_tags %}
+{% load persian_translation_tags %}
 
 {% block title %}
     لیست مدیران
@@ -33,13 +35,13 @@
         <tbody>
         {% for manager in manager_list %}
             <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ manager.username }}</td>
+                <td>{{ forloop.counter|translate_numbers }}</td>
+                <td>{{ manager.username|translate_numbers }}</td>
                 <td>{{ manager.first_name }}</td>
                 <td>{{ manager.last_name }}</td>
                 <td>{{ manager.gender }}</td>
-                <td>{{ manager.birthday }}</td>
-                <td>{{ manager.cell_phone }}</td>
+                <td>{{ manager.birthday|to_jalali:'%Y/%m/%d'|translate_numbers }}</td>
+                <td>{{ manager.cell_phone|translate_numbers }}</td>
                 <td>{{ manager.province }}</td>
                 <td>{{ manager.city }}</td>
                 <td>

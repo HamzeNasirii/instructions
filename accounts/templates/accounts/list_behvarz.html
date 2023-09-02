@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load jalali_tags %}
+{% load persian_translation_tags %}
 
 {% block title %}
     لیست مراقبین سلامت
@@ -43,18 +45,18 @@
             <tbody>
             {% for behvarz in behvarz_list %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ behvarz.username }}</td>
+                    <td>{{ forloop.counter|translate_numbers }}</td>
+                    <td>{{ behvarz.username|translate_numbers }}</td>
                     <td>{{ behvarz.first_name }}</td>
                     <td>{{ behvarz.last_name }}</td>
                     <td>{{ behvarz.gender }}</td>
-                    <td>{{ behvarz.birthday }}</td>
-                    <td>{{ behvarz.cell_phone }}</td>
+                    <td>{{ behvarz.birthday|to_jalali:'%Y/%m/%d'|translate_numbers}}</td>
+                    <td>{{ behvarz.cell_phone|translate_numbers }}</td>
                     <td>{{ behvarz.get_education_display }}</td>
                     <td>{{ behvarz.province }}</td>
                     <td>{{ behvarz.city }}</td>
-                    <td>{{ behvarz.health_center }}</td>
-                    <td>{{ behvarz.village }}</td>
+                    <td>{{ behvarz.health_center|translate_numbers }}</td>
+                    <td>{{ behvarz.village|translate_numbers }}</td>
                     <td>
                         {% if user.is_superuser or user.user_type == 'manager' %}
                             <a class="text text-green" href="{% url 'behvarz_update' behvarz.id %}">ویرایش</a>

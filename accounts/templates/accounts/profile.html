@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load persian_translation_tags %}
+{% load jalali_tags %}
 
 {% block title %}
     حساب کاربری
@@ -29,7 +31,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="id_birthday">تاریخ تولد:</label>
-                            <input type="date" name="birthday" value="{{ user.birthday|date:'Y-m-d' }}" id="id_birthday"
+                            <input type="date" name="birthday" value="{{ user.birthday|date:'Y-m-d'}}" id="id_birthday"
                                    class="form-control">
                         </div>
 
@@ -54,7 +56,7 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="id_cell_phone">شماره همراه:</label>
-                            <input type="text" name="cell_phone" value="{{ user.cell_phone }}" id="id_cell_phone"
+                            <input type="text" name="cell_phone" value="{{ user.cell_phone|translate_numbers }}" id="id_cell_phone"
                                    class="form-control">
                         </div>
                     </div>

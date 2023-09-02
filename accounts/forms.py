@@ -1,6 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
 from django.contrib.auth import get_user_model
+from jalali_date.fields import JalaliDateField
+from jalali_date.widgets import AdminJalaliDateWidget
 
 from .models import City, HealthCenter, Village
 
@@ -58,6 +60,11 @@ class BehvarzCreationForm(UserCreationForm):
         model = get_user_model()
         fields = ('username', 'user_type', 'gender', 'birthday', 'education', 'first_name', 'last_name', 'cell_phone',
                   'province', 'city', 'health_center', 'village',)
+
+    def __init__(self, *args, **kwargs):
+        super(BehvarzCreationForm, self).__init__(*args, **kwargs)
+        self.fields["birthday"] = JalaliDateField(label=('تاریخ تولد'),
+                                                  widget=AdminJalaliDateWidget)
 
 
 class BehvarzChangeForm(UserChangeForm):

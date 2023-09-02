@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load jalali_tags %}
+{% load persian_translation_tags %}
 
 {% block title %}
     لیست کارشناسان
@@ -38,16 +40,16 @@
             <tbody>
             {% for expert in expert_list %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ expert.username }}</td>
+                    <td>{{ forloop.counter|translate_numbers }}</td>
+                    <td>{{ expert.username|translate_numbers }}</td>
                     <td>{{ expert.first_name }}</td>
                     <td>{{ expert.last_name }}</td>
                     <td>{{ expert.gender }}</td>
-                    <td>{{ expert.birthday }}</td>
-                    <td>{{ expert.cell_phone }}</td>
+                    <td>{{ expert.birthday|to_jalali:'%Y/%m/%d'|translate_numbers }}</td>
+                    <td>{{ expert.cell_phone|translate_numbers }}</td>
                     <td>{{ expert.province }}</td>
                     <td>{{ expert.city }}</td>
-                    <td>{{ expert.health_center }}</td>
+                    <td>{{ expert.health_center|translate_numbers }}</td>
                     <td>
                         <a class="text-green" href="{% url 'expert_update' expert.id %}">ویرایش</a>
                         <span> | </span>

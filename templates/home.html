@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load persian_translation_tags %}
 
 {% block title %}
     داشبورد
@@ -41,7 +42,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
                 <div class="inner">
-                    <h3>{{ user_count }}</h3>
+                    <h3>{{ user_count|translate_numbers }}</h3>
 
                     <p>تعداد کاربران</p>
                 </div>
@@ -57,7 +58,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
                 <div class="inner">
-                    <h3>{{ instruction_count }}</h3>
+                    <h3>{{ instruction_count|translate_numbers }}</h3>
 
                     <p>تعداد محتواهای ارسالی</p>
                 </div>

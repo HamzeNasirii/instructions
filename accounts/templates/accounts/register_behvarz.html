@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load jalali_tags %}
 
 {% block title %}
     ثبتنام مراقب سلامت جدید
@@ -55,6 +56,7 @@
                         <div class="form-group col-md-3">
                             <label for="id_birthday">تاریخ تولد:</label>
                             <input type="date" class="form-control" name="birthday" id="id_birthday">
+                            {{ form.birthday }}
                         </div>
 
                         <div class="form-group col-md-3">
@@ -104,7 +106,7 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="id_city">شهرستان:</label>
-                        {% if user.user_type == 'manager' %}
+                            {% if user.user_type == 'manager' %}
                                 {% with manager_city=user.city %}
                                     <select name="city" class="form-control" id="id_city" disabled>
                                         <option value="{{ default_city_id }}">{{ manager_city.name }}</option>
@@ -225,4 +227,9 @@
             });
         });
     </script>
+
+    <link rel="stylesheet" href="{% static 'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css' %}">
+    <script src="{% static 'admin/js/django_jalali.min.js' %}"></script>
+
+
 {% endblock %}

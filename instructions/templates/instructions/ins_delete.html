@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load persian_translation_tags %}
 
 {% block title %}
 {% endblock %}
@@ -12,7 +13,7 @@
             <div class="card-body py-4">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <p class="py-2">آیا از حذف مقاله "{{ instruction.title }}" با شماره نامه "{{ instruction.number }}" اطمینان
+                    <p class="py-2">آیا از حذف مقاله "{{ instruction.title }}" با شماره نامه "{{ instruction.number|translate_numbers }}" اطمینان
                         دارید؟</p>
                     <button type="submit" class="btn btn-danger">حذف {{ instruction.type }}</button>
                     <span>  <a href="{% url 'instruction_list' %}" class="btn btn-info">انصراف</a> </span>
