@@ -28,46 +28,63 @@
                 </h2>
                 <div class="card fat">
                     <div class="card-body">
-                        <div class="card-title">ورود</div>
+                        <div class="card-title">بازیابی رمز عبور</div>
                         <form method="post" class="needs-validation" novalidate>
                             {% csrf_token %}
                             <div class="form-group">
-                                <label for="email">شماره ملی</label>
+                                <label for="text">شماره ملی</label>
                                 <input id="id_username" type="text" class="form-control" name="username" maxlength="50"
                                        placeholder="شماره ملی خودرا وارد کنید" value="" required autofocus>
                                 <div class="invalid-feedback">
                                     شماره ملی وارد شده اشتباه است.
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label for="password">رمز عبور</label>
+                                <label for="id_cell_phone">شماره همراه:</label>
+                                <input type="text" name="cell_phone" value=""
+                                       id="id_cell_phone"
+                                       class="form-control">
+
+                                <label for="id_security_q">یک سوال امنیتی انتخاب کنید:</label>
+                                <select name="security_q" class="form-control" id="id_security_q">
+                                    {% for option in form.security_q %}
+                                        {{ option }}
+                                    {% endfor %}
+                                </select>
+
+                                <label for="id_security_key">پاسخ امنیتی</label>
                                 <div class="input-group mb-3">
-                                    <input id="id_password" type="password" class="form-control" name="password"
-                                           placeholder="********" required>
-                                    <div class="input-group-append">
-                                            <span class="btn btn-primary text-white input-group-text">
-                                                <i id="#password" class="toggle-password fa fa-eye"></i>
-                                            </span>
-                                    </div>
+                                    <input type="text" name="security_key" value=""
+                                           id="id_security_key"
+                                           class="form-control">
                                     <div class="invalid-feedback">
-                                        ورود رمزعبور اجباری است.
+                                        پاسخ به سوال اجباری است.
                                     </div>
                                 </div>
-                            </div>
+                                {% if error %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ error }}
+                                    </div>
+                                {% endif %}
+                                <label for="id_new_password">رمزعبور جدید شما</label>
+                                <div class="input-group mb-3">
+                                    <input class="form-control" name="new_password"
+                                           readonly {{ form.new_password }}>
+                                </div>
 
-                            <a href="{% url 'recoveryPass' %}" class="forgot-password float-right">
-                                فراموشی رمز؟
-                            </a>
+                            </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-sm btn-primary btn-block">
-                                    Login
+                                <button type="submit" class="btn btn-sm btn-primary btn-block"
+                                        id="password-recovery-button">
+                                    نمایش کلمه عبور
                                 </button>
+                                <br>
+                                <a href="{% url 'login' %}">
+                                    <button type="button" class="btn btn-sm btn-primary btn-block">
+                                        صفحه ورود
+                                    </button>
+                                </a>
                             </div>
-                            {#                                <div class="register-section text-center">#}
-                            {#                                    Don't have an account? <a href="register.html">Create One</a>#}
-                            {#                                </div>#}
                         </form>
                     </div>
                 </div>

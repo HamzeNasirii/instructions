@@ -15,12 +15,13 @@ class CustomUserAdmin(ModelAdminJalaliMixin, UserAdmin):
     model = CustomUser
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': (
-            'user_type', 'birthday', 'gender', 'cell_phone', 'province', 'city', 'health_center', 'village',)}),
+            'user_type', 'birthday', 'gender', 'cell_phone', 'security_q', 'security_key', 'province', 'city',
+            'health_center', 'village',)}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
         (None, {'fields': (
             'user_type', 'birthday', 'gender', 'first_name', 'last_name', 'cell_phone', 'province', 'city',
-            'health_center', 'village','groups')}),
+            'health_center', 'village', 'groups')}),
     )
 
 

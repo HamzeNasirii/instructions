@@ -8,14 +8,31 @@
 
 {% block content %}
 
+
     <div class="col-md-12">
         <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title mb-3 float-left">حساب کاربری</h3>
             </div>
+
             <div class="card-body">
+
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 text- text-lg-right">
+                            <!-- محتوای متنی -->
+                        </div>
+                        <div class="col-lg-5 px-5 pl-lg-1 pb-5 pb-lg-0">
+                            <div class="d-flex justify-content-center">
+                                {% if user.photo %}
+                                    <img class="img-fluid rounded-circle shadow-sm" src="{{ user.photo.url }}"
+                                         alt="تصویر پروفایل">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="id_first_name">نام:</label>
@@ -31,7 +48,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="id_birthday">تاریخ تولد:</label>
-                            <input type="date" name="birthday" value="{{ user.birthday|date:'Y-m-d'}}" id="id_birthday"
+                            <input type="date" name="birthday" value="{{ user.birthday|date:'Y-m-d' }}" id="id_birthday"
                                    class="form-control">
                         </div>
 
@@ -56,7 +73,8 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="id_cell_phone">شماره همراه:</label>
-                            <input type="text" name="cell_phone" value="{{ user.cell_phone|translate_numbers }}" id="id_cell_phone"
+                            <input type="text" name="cell_phone" value="{{ user.cell_phone|translate_numbers }}"
+                                   id="id_cell_phone"
                                    class="form-control">
                         </div>
                     </div>
@@ -92,15 +110,32 @@
                             </div>
                         </div>
                     {% endif %}
-                    {#                    <div class="form-row">#}
-                    <div class="form-group col-md-3">
-                        <label for="id_photo">تصویر پروفایل:</label>
-                        <input type="file" name="photo" id="id_photo" class="form-control-file"
-                               onchange="previewImage(this)">
-                        <img id="preview" src="#" alt="Preview"
-                             style="display: none; max-width: 200px; margin-top: 10px;">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="id_photo">تصویر پروفایل:</label>
+                            <input type="file" name="photo" id="id_photo" class="form-control-file"
+                                   onchange="previewImage(this)">
+                            <img id="preview" src="#" alt="Preview"
+                                 style="display: none; max-width: 200px; margin-top: 10px;">
+                        </div>
                     </div>
-                    {#                    </div>#}
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="id_security_q">یک سوال امنیتی انتخاب کنید:</label>
+                            <select name="security_q" class="form-control" id="id_security_q">
+                                {% for option in form.security_q %}
+                                    {{ option }}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="id_security_key">پاسخ به سوال امنیتی:</label>
+                            <input type="text" name="security_key" value="{{ user.security_key }}"
+                                   id="id_security_key"
+                                   class="form-control">
+                        </div>
+                    </div>
                     <div class="form-group col-md-3">
                         <input type="submit" class="btn btn-success" value="ویرایش حساب">
                     </div>

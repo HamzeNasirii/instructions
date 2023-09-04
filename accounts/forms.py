@@ -7,6 +7,17 @@ from jalali_date.widgets import AdminJalaliDateWidget
 from .models import City, HealthCenter, Village
 
 
+class SecurityQuestionForm(forms.Form):
+    SECURITY_Q = (
+        ('1', 'نام اولین دبیر شما چه بود؟'),
+        ('2', 'نام بهترین کتابی که خوانده اید چه بود؟'),
+        ('3', 'نام رنگ مورد علاقه شما چیست؟'),
+        ('4', 'غذای مورد علاقه شما چیست؟'),
+    )
+    security_q = forms.ChoiceField(choices=SECURITY_Q, label='سوال امنیتی')
+    security_key = forms.CharField(label='پاسخ سوال امنیتی')
+
+
 class ManagerCreationForm(UserCreationForm):
     class Meta:
         model = get_user_model()

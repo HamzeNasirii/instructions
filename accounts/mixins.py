@@ -1,7 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-from .models import CustomUser
 from instructions.models import Instruction
 
 
@@ -40,13 +39,17 @@ class FormValidMixin:
 class FieldsProfileMixin:
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            self.fields = ['first_name', 'last_name', 'birthday', 'gender', 'education', 'cell_phone', 'photo', ]
+            self.fields = ['first_name', 'last_name', 'birthday', 'gender', 'education', 'cell_phone', 'photo',
+                           'security_q', 'security_key', ]
         elif request.user.user_type == 'manager':
-            self.fields = ['first_name', 'last_name', 'birthday', 'gender', 'education', 'cell_phone', 'photo', ]
+            self.fields = ['first_name', 'last_name', 'birthday', 'gender', 'education', 'cell_phone', 'photo',
+                           'security_q', 'security_key', ]
         elif request.user.user_type == 'expert':
-            self.fields = ['first_name', 'last_name', 'birthday', 'gender', 'education', 'cell_phone', 'photo', ]
+            self.fields = ['first_name', 'last_name', 'birthday', 'gender', 'education', 'cell_phone', 'photo',
+                           'security_q', 'security_key', ]
         elif request.user.user_type == 'behvarz':
-            self.fields = ['first_name', 'last_name', 'birthday', 'gender', 'education', 'cell_phone', 'photo', ]
+            self.fields = ['first_name', 'last_name', 'birthday', 'gender', 'education', 'cell_phone', 'photo',
+                           'security_q', 'security_key', ]
         else:
             raise Http404('شما به این صفحه دسترسی ندارید.')
         return super().dispatch(request, *args, **kwargs)
@@ -56,11 +59,11 @@ class FieldsProfileMixin:
 class FieldsMixin:
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_superuser:
-            self.fields = ['type', 'number', 'title', 'description', 'for_behvarz','for_expert', 'status']
+            self.fields = ['type', 'number', 'title', 'description', 'for_behvarz', 'for_expert', 'status']
         elif request.user.user_type == 'manager':
-            self.fields = ['type', 'number', 'title', 'description', 'for_behvarz','for_expert', 'status']
+            self.fields = ['type', 'number', 'title', 'description', 'for_behvarz', 'for_expert', 'status']
         elif request.user.user_type == 'expert':
-            self.fields = ['type', 'number', 'title', 'description', 'for_behvarz','for_expert', 'status']
+            self.fields = ['type', 'number', 'title', 'description', 'for_behvarz', 'for_expert', 'status']
         # elif request.user.is_behvarz:
         #     return super().dispatch(request, *args, **kwargs)
         else:

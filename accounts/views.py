@@ -9,11 +9,52 @@ from django.contrib import messages
 from django.http import Http404
 from django.db.models import Q
 from django import forms
+import random
+import string
+from django.contrib.auth.hashers import make_password
 
+from django.views import View
 from .forms import BehvarzCreationForm, BehvarzChangeForm, ExpertCreationForm, ManagerCreationForm, ExpertChangeForm, \
-    ManagerChangeForm, CityCreateForm, HealthCenterForm, VillageForm
+    ManagerChangeForm, CityCreateForm, HealthCenterForm, VillageForm, SecurityQuestionForm
 from .models import Province, City, HealthCenter, Village, CustomUser
 from .mixins import FieldsProfileMixin
+
+
+class PassRecoveryView(View):
+    model = CustomUser
+
+    def get(self, request):
+        form = SecurityQuestionForm()
+        return render(request, 'registration/recoveryPass.html', {'form': form})
+
+    def post(self, request):
+        secu_q_selected = request.POST.get('security_q')
+        secu_answer = request.POST.get('security_key')
+        cellphone_answer = request.POST.get('cell_phone')
+        username = request.POST.get('username')
+
+        try:
+            user = CustomUser.objects.get(username=username)
+        except CustomUser.DoesNotExist:
+            return render(request, 'registration/recoveryPass.html', {'error': 'نام کاربری معتبر نیست.'})
+
+        form = SecurityQuestionForm()  # تعیین اولیه متغیر form
+
+        if (
+                user.security_q == secu_q_selected and
+                user.security_key == secu_answer and
+                str(user.cell_phone) == cellphone_answer
+        ):
+            new_password = ''.join(random.choices(string.digits, k=3))
+            user.password = make_password(new_password)
+            user.save()
+
+            # تعیین متغیر form در صورت موفقیت آمیز بودن شرط if
+            form.fields['new_password'] = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}),
+                                                          initial=new_password)
+            return render(request, 'registration/recoveryPass.html', {'form': form, 'success': 'رمزعبور جدید'})
+
+        return render(request, 'registration/recoveryPass.html', {'form': form, 'error': 'داده‌های وارد شده صحیح نمی‌باشند.'})
 
 
 class UserIncompleteRegisterView(ListView):
