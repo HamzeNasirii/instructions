@@ -29,6 +29,9 @@ urlpatterns = [
                   path('tickets/', include('tickets.urls')),
 
                   path('', include('pages.urls')),
+
+                  path('temperatures/', include('temperatures.urls')),
                   path('instructions/', include('instructions.urls')),
                   path('emails/', include('emails.urls')),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

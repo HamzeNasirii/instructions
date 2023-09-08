@@ -2,7 +2,9 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -11,13 +13,46 @@ from django.db.models import Q
 from django import forms
 import random
 import string
-from django.contrib.auth.hashers import make_password
 
 from django.views import View
 from .forms import BehvarzCreationForm, BehvarzChangeForm, ExpertCreationForm, ManagerCreationForm, ExpertChangeForm, \
     ManagerChangeForm, CityCreateForm, HealthCenterForm, VillageForm, SecurityQuestionForm
 from .models import Province, City, HealthCenter, Village, CustomUser
 from .mixins import FieldsProfileMixin
+
+
+@login_required
+def change_password(request, pk):
+    # استفاده از پارامتر pk در کد ویو
+    user = get_object_or_404(CustomUser, pk=pk)
+
+    if request.method == 'POST':
+        old_password = request.POST['old_password']
+        new_password1 = request.POST['new_password1']
+        new_password2 = request.POST['new_password2']
+
+        # بررسی صحت رمز قدیمی با استفاده از user
+        if not user.check_password(old_password):
+            messages.error(request, 'رمز قدیمی نادرست است.')
+            return redirect('changePass', pk=pk)
+
+        # بررسی تطابق رمزهای جدید
+        if new_password1 != new_password2:
+            messages.error(request, 'رمزهای جدید با هم مطابقت ندارند.')
+            return redirect('changePass', pk=pk)
+
+        # تغییر رمز عبور
+        user.set_password(new_password1)
+        user.save()
+
+        # ورود مجدد پس از تغییر رمز
+        user = authenticate(username=user.username, password=new_password1)
+        login(request, user)
+
+        messages.success(request, 'رمز عبور با موفقیت تغییر یافت.')
+        return redirect('changePass', pk=pk)
+
+    return render(request, 'registration/changePass.html', {'user': user})
 
 
 class PassRecoveryView(View):

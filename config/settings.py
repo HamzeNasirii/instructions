@@ -41,12 +41,14 @@ INSTALLED_APPS = [
     'star_ratings',
     'jalali_date',
 
+    'persian_translate',
+
     'accounts',
     'pages',
     'instructions',
     'emails',
     'tickets',
-    'persian_translate',
+    'temperatures',
 ]
 
 # default settings (optional)
@@ -74,9 +76,8 @@ JALALI_DATE_DEFAULTS = {
     },
 }
 
-
-
 import locale
+
 locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 
 MIDDLEWARE = [

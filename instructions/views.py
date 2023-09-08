@@ -152,38 +152,6 @@ class InsUpdateView(LoginRequiredMixin, UpdateView):
                     self.request, f'خطا در فیلد {form.fields[field].label}: {error}')
         return self.render_to_response(self.get_context_data(form=form, ))
 
-    # def form_invalid(self, form):
-    #     # اضافه کردن خطاها به فرم
-    #     for field in form.errors:
-    #         for error in form.errors[field]:
-    #             form.add_error(field, error)
-
-    #     # بازگرداندن فرم به تمپلیت
-    #     return self.render_to_response(self.get_context_data(form=form))
-
-    # def form_valid(self, form):
-    #     instruction = form.save(commit=False)
-    #     instruction.user = self.request.user
-
-    #     # چاپ مقادیر فیلدهای مدل Instruction
-    #     print(instruction.type)
-    #     print(instruction.status)
-
-    #     instruction.save()
-    #     form.save_m2m()
-
-    #     attachments = self.request.FILES.getlist('attachments')
-    #     for attachment in attachments:
-    #         attachment_instance = Attachment.objects.create(
-    #             ins_attach=instruction,
-    #             file=attachment,
-    #             file_name=os.path.basename(attachment.name),
-    #             file_size=attachment.size,
-    #         )
-    #         instruction.instruction_attach.add(attachment_instance)
-
-    #     return super().form_valid(form)
-
 
 class InsCreateView(LoginRequiredMixin, FieldsMixin, FormValidMixin, CreateView):
     model = Instruction
@@ -219,6 +187,7 @@ class SelfInsListView(LoginRequiredMixin, ListView):
     model = Instruction
     template_name = 'instructions/self_ins_list.html'
     context_object_name = 'instructions'
+    paginate_by = 20
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
@@ -230,6 +199,7 @@ class SelfInsListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['last_visited'] = self.request.session.get('last_visited')
         self.request.session['last_visited'] = timezone.now().isoformat()
+        context['ins_count'] = self.get_queryset().count()
 
         return context
 
@@ -245,6 +215,7 @@ class InsListView(LoginRequiredMixin, ListView):
     model = Instruction
     template_name = 'instructions/ins_list.html'
     context_object_name = 'instructions'
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -292,6 +263,9 @@ class InsListView(LoginRequiredMixin, ListView):
         form = InstructionForm()
         context['type_choices'] = form.fields['type'].choices
 
+        # Add Count Installations to context
+        context['ins_count'] = self.get_queryset().count()
+
         return context
 
 
@@ -321,6 +295,12 @@ class InsListViewDeleted(ListView):
     model = Instruction
     template_name = 'instructions/ins_list_deleted.html'
     context_object_name = 'instructions'
+    paginate_by = 20
 
     def get_queryset(self):
         return Instruction.objects.filter(is_active=False)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ins_count'] = self.get_queryset().count()
+        return context

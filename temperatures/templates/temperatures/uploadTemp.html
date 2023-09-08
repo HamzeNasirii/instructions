@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <!-- در فایل upload_text.html -->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="text_file">
+        <button type="submit">Upload</button>
+    </form>
+    {% if was_uploaded %}
+        <p>File uploaded and processed successfully!</p>
+    {% endif %}
+{% endblock %}

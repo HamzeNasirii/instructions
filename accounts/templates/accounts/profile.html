@@ -7,7 +7,29 @@
 {% endblock %}
 
 {% block content %}
+    <style>
+        .profile-img {
+            position: absolute;
+            top: 100px;
+            width: 400px !important;
+            height: 400px !important;
+            border-radius: 50%;
+            border: 8px solid white;
+            box-shadow: 0 0 10px #ccc !important;
+        }
 
+        {#.d-flex.justify-content-center {#}
+        {#    align-items: center;#}
+        {#}#}
+        {##}
+        {#.d-flex.justify-content-center img {#}
+        {#    max-width: 400%;#}
+        {#    max-height: 400%;#}
+        {#    border-radius: 50%;#}
+        {#    border: 8px solid white;#}
+        {#    box-shadow: 0 0 20px #ccc;#}
+        {#}#}
+    </style>
 
     <div class="col-md-12">
         <div class="card card-primary">
@@ -27,7 +49,8 @@
                         <div class="col-lg-5 px-5 pl-lg-1 pb-5 pb-lg-0">
                             <div class="d-flex justify-content-center">
                                 {% if user.photo %}
-                                    <img class="img-fluid rounded-circle shadow-sm" src="{{ user.photo.url }}"
+                                    <img class="img-fluid rounded-circle shadow-sm profile-img"
+                                         src="{{ user.photo.url }}"
                                          alt="تصویر پروفایل">
                                 {% endif %}
                             </div>

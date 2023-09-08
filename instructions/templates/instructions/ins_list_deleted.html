@@ -42,8 +42,8 @@
         {% endif %}
         <button type="submit" class="btn btn-primary mb-2">جستجو</button>
     </form>
-
     <br><br>
+    <p>تعداد کل: {{ ins_count|translate_numbers }}</p>
     {% if instructions %}
         <table class="table table-striped">
             <thead>
@@ -130,13 +130,29 @@
                 {% endif %}
             {% endfor %}
             </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="12">This is the footer of the table</td>
-            </tr>
-            </tfoot>
         </table>
     {% else %}
         <p>محتوایی برای نمایش وجود ندارد.</p>
     {% endif %}
+
+    {% if page_obj > 1 %}
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.pervious_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>{% endif %}
+                <li class="page-item"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>{% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
 {% endblock %}

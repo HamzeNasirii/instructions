@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load persian_translation_tags %}
 {% load jalali_tags %}
+{% load static %}
 
 {% block title %}
 {% endblock %}
@@ -46,7 +47,8 @@
         <a href="{% url 'instruction_create' %}">درج دستورالعمل جدید</a>
     {% endif %}
     <br><br>
-    <p>تعداد کل: {{ instructions|length }}</p>
+    <p>تعداد کل: {{ ins_count|translate_numbers }}</p>
+
     {% if instructions %}
         <table class="table table-striped">
             <thead>
@@ -128,13 +130,64 @@
                 </tr>
             {% endfor %}
             </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="12">This is the footer of the table</td>
-            </tr>
-            </tfoot>
+            {#            <tfoot>#}
+            {#            <tr>#}
+            {#                <td colspan="12">This is the footer of the table</td>#}
+            {#            </tr>#}
+            {#            </tfoot>#}
         </table>
     {% else %}
         <p>محتوایی برای نمایش وجود ندارد.</p>
     {% endif %}
+
+    {% if page_obj != 0 %}
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.pervious_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>{% endif %}
+                <li class="page-item"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>{% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+
+    {#    <nav aria-label="Page navigation example">#}
+    {#        <ul class="pagination justify-content-center">#}
+    {#            {% if page_obj.has_previous %}#}
+    {#                <li class="page-item">#}
+    {#                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1"#}
+    {#                       aria-disabled="true">قبل</a>#}
+    {#                </li>{% endif %}#}
+    {#            <li class="page-item"><a class="page-link" href="">{{ page_obj.number }}</a></li>#}
+    {#            {% if page_obj.has_next %}#}
+    {#                <li class="page-item">#}
+    {#                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">بعد</a>#}
+    {#                </li>{% endif %}#}
+    {#        </ul>#}
+    {#    </nav>#}
+
+
+    {#    <div class="pagination-container wow zoomIn mar-b-1x" data-wow-duration="0.5s">#}
+    {#        <ul class="pagination">#}
+    {#            <li class="pagination-item--wide first"><a class="pagination-link--wide first" href="#"><</a></li>#}
+    {#            <li class="pagination-item first-number"><a class="pagination-link" href="#">1</a></li>#}
+    {#            <li class="pagination-item"><a class="pagination-link" href="#">2</a></li>#}
+    {#            <li class="pagination-item is-active"><a class="pagination-link" href="#">3</a></li>#}
+    {#            <li class="pagination-item"><a class="pagination-link" href="#">4</a></li>#}
+    {#            <li class="pagination-item"><a class="pagination-link" href="#">5</a></li>#}
+    {#            <li class="pagination-item--wide last"><a class="pagination-link--wide last" href="#"> ></a></li>#}
+    {#        </ul>#}
+    {#    </div>#}
+    {##}
+    {#    <link rel="stylesheet" type="text/css" href="{% static 'css/paginate.css' %}">#}
 {% endblock %}
