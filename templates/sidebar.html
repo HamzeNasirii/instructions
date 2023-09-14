@@ -222,7 +222,7 @@
                     </ul>
                 </li>
 
-                {% if user.is_superuser %}
+                {% if user.is_authenticated %}
                     <li class="nav-item has-treeview menu-open">
                         <a href="#" class="nav-link active">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -232,15 +232,33 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                                <a href="{% url 'devicesList' %}"
+                                   class="nav-link {% if request.resolver_match.url_name == 'devicesList' %}
+                            active
+                            {% endif %} ">
+                                    <i class="fa fa-list nav-icon"></i>
+                                    <p>لیست گزارش های دمای یخچال</p>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="{% url 'uploadTemp' %}"
                                    class="nav-link {% if request.resolver_match.url_name == 'uploadTemp' %}
                             active
                             {% endif %} ">
                                     <i class="fa fa-list nav-icon"></i>
-                                    <p>آپلود فایل</p>
+                                    <p>آپلود گزارش دمای یخچال</p>
                                 </a>
                             </li>
+{#                        <li class="nav-item">#}
+{#                                <a href="{% url 'device-reports' device.id %}"#}
+{#                                   class="nav-link {% if request.resolver_match.url_name == 'device-reports' %}#}
+{#                            active#}
+{#                            {% endif %} ">#}
+{#                                    <i class="fa fa-list nav-icon"></i>#}
+{#                                    <p>ایجاد گزارش دمای یخچال</p>#}
+{#                                </a>#}
+{#                            </li>#}
                             {#                                                        <li class="nav-item">#}
                             {#                                                            <a href="{% url 'province_add_list' %}"#}
                             {#                                                               class="nav-link {% if request.resolver_match.url_name == 'province_add_list' %}#}

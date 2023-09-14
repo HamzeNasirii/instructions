@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'emails',
     'tickets',
     'temperatures',
+    'exampels',
 ]
 
 # default settings (optional)

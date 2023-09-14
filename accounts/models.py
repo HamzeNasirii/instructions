@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.shortcuts import reverse
+from temperatures.models import Device
 
 
 class Province(models.Model):
@@ -77,6 +78,8 @@ class CustomUser(AbstractUser):
     city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, blank=True)
     health_center = models.ForeignKey(HealthCenter, on_delete=models.CASCADE, null=True, blank=True)
     village = models.ForeignKey(Village, on_delete=models.CASCADE, null=True, blank=True)
+
+    devices = models.ManyToManyField(Device, blank=True)
 
     security_q = models.CharField(max_length=20, choices=SECURITY_Q, null=True, blank=True)
     security_key = models.CharField(max_length=120, blank=True, null=True)

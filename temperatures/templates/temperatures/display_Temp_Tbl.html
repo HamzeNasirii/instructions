@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <!-- In the display_text.html file -->
+    <h1>گزارش‌های دستگاه: {{ device.serial }}</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>تاریخ</th>
+            <th>حداقل دما</th>
+            <th>زمان حداقل دما</th>
+            <th>حداکثر دما</th>
+            <th>زمان حداکثر دما</th>
+            <th>میانگین دما</th>
+            <th>زمان هشدار 0</th>
+            <th>زمان هشدار 1</th>
+            <th>زمان قطع ارتباط</th>
+            <th>تعداد رویدادها</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for report in reports %}
+            <tr>
+                <td>{{ report.date }}</td>
+                <td>{{ report.min_temp }}</td>
+                <td>{{ report.min_temp_time }}</td>
+                <td>{{ report.max_temp }}</td>
+                <td>{{ report.max_temp_time }}</td>
+                <td>{{ report.avg_temp }}</td>
+                <td>{{ report.alarm0_time }}</td>
+                <td>{{ report.alarm1_time }}</td>
+                <td>{{ report.timeout_time }}</td>
+                <td>{{ report.events }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'home' %}">بازگشت به خانه</a>
+{% endblock %}

@@ -33,5 +33,6 @@ urlpatterns = [
                   path('temperatures/', include('temperatures.urls')),
                   path('instructions/', include('instructions.urls')),
                   path('emails/', include('emails.urls')),
+                  path('exampels/', include('exampels.urls')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
