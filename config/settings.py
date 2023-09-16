@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'instructions',
     'emails',
     'tickets',
-    'temperatures',
+    'temps',
     'exampels',
 ]
 

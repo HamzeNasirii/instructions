@@ -30,7 +30,7 @@ urlpatterns = [
 
                   path('', include('pages.urls')),
 
-                  path('temperatures/', include('temperatures.urls')),
+                  path('temperatures/', include('temps.urls')),
                   path('instructions/', include('instructions.urls')),
                   path('emails/', include('emails.urls')),
                   path('exampels/', include('exampels.urls')),
