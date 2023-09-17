@@ -6,152 +6,164 @@
 {% endblock %}
 
 {% block content %}
-    <h1>لیست محتوا</h1>
-    <form method="get" class="form-inline">
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="search" class="sr-only">جستجو:</label>
-            <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" id="search"
-                   placeholder="جستجو">
-        </div>
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="type" class="sr-only">نوع دستورالعمل:</label>
-            <select name="type" class="form-control" id="type">
-                {% for value, label in type_choices %}
-                    <option value="{{ value }}">{{ label }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="start_date" class="sr-only">از تاریخ:</label>
-            <input type="date" name="start_date" value="{{ request.GET.start_date }}" class="form-control"
-                   id="start_date">
-        </div>
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="end_date" class="sr-only">تا تاریخ:</label>
-            <input type="date" name="end_date" value="{{ request.GET.end_date }}" class="form-control" id="end_date">
-        </div>
-        {% if user.is_superuser %}
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="status" class="sr-only">وضعیت:</label>
-                <select name="status" class="form-control" id="status">
-                    <option value="">همه وضعیت‌ها</option>
-                    <option value="pub">منتشر شده</option>
-                    <option value="drf">پیشنویس</option>
-                </select>
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title mb-3 float-left">لیست محتوا</h3>
             </div>
-        {% endif %}
-        <button type="submit" class="btn btn-primary mb-2">جستجو</button>
-    </form>
-
-    {% if not user.user_type == 'behvarz' %}
-        <a href="{% url 'instruction_create' %}">درج دستورالعمل جدید</a>
-    {% endif %}
-    <br><br>
-    <p>تعداد کل: {{ ins_count|translate_numbers }}</p>
-    {% if instructions %}
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>ردیف</th>
-                <th>User</th>
-                <th>نوع</th>
-                <th>ش.نامه</th>
-                <th>موضوع</th>
-                <th>ضمیمه</th>
-                <th>برای مراقب سلامت</th>
-                <th>برای کارشناس</th>
-                <th hidden="hidden">Is Active</th>
-                {#                <th>عملیات</th>#}
-                <th>وضعیت</th>
-                <th>تاریخ ویرایش</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for instruction in instructions %}
-                {% if instruction.is_active %}
-                    {% if instruction.status == 'pub' or user.is_superuser %}
-                        <tr>
-                            <td>{{ forloop.counter|translate_numbers }}</td>
-                            <td>{{ instruction.user.username|translate_numbers }}</td>
-                            <td>{{ instruction.type }}</td>
-                            <td>{{ instruction.number|translate_numbers }}</td>
-                            <td>
-                                <a class="text-info"
-                                   href="{% url 'instruction_detail' instruction.id %}">{{ instruction.title|translate_numbers }}</a>
-                                {% if instruction.datetime_created > last_visited %}
-                                    <strong class="new-item">جدید</strong>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if instruction.instruction_attach.count != 0 %}
-                                    {{ instruction.instruction_attach.count|translate_numbers }}
-                                {% else %}
-                                    ندارد
-                                {% endif %}
-                            </td>
-                            <td>{% if instruction.for_behvarz %}Yes{% else %}No{% endif %}</td>
-                            <td>{% if instruction.for_expert %}Yes{% else %}No{% endif %}</td>
-                            <td hidden="hidden">{% if instruction.is_active %}Yes{% else %}No{% endif %}</td>
-                            {#                    <td>#}
-                            {##}
-                            {#                        {% if instruction.status == 'drf' and instruction.user == request.user or user.is_superuser %}#}
-                            {#                            <span>#}
-                            {#                            <a class="text-green" href="{% url 'instruction_update' instruction.id %}">#}
-                            {#                            <i style="font-size:16px;color: darkred" class="fa">&#xf044;</i>#}
-                            {#                            </a>#}
-                            {#                        {% endif %}#}
-                            {#                    <span>|</span>#}
-                            {#                        {% if user.is_superuser or instruction.user == request.user %}#}
-                            {#                            <a class="text-danger" href="{% url 'instruction_delete' instruction.id %}">#}
-                            {#                                <i style="font-size:16px;color:darkred" class="fa">&#xf00d;</i>#}
-                            {#                            </a>#}
-                            {#                            </span>#}
-                            {#                        {% endif %}#}
-                            {#                                            <span>|</span>#}
-                            {#                                            <a class="text-info" href="{% url 'instruction_detail' instruction.id %}">جزئیات</a></td>#}
-                            {#                    <td>#}
-                            <td>
-                                {% if instruction.status == 'pub' %}
-                                    <span class="badge badge-success">منتشر شده</span>
-                                {% else %}
-                                    <span class="badge badge-info">پیشنویس</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ instruction.datetime_updated|to_jalali:'%Y/%m/%d'|translate_numbers }}
-                                {% if instruction.datetime_created > last_visited %}
-                                    <td><strong>جدید</strong></td>
-                                {% else %}
-                                    <td></td>
-                                {% endif %}
-                            </td>
-                        </tr>
+            <div class="card-body">
+                <form method="get" class="form-inline">
+                    {% csrf_token %}
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="search" class="sr-only">جستجو:</label>
+                        <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" id="search"
+                               placeholder="جستجو">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="type" class="sr-only">نوع دستورالعمل:</label>
+                        <select name="type" class="form-control" id="type">
+                            {% for value, label in type_choices %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="start_date" class="sr-only">از تاریخ:</label>
+                        <input type="date" name="start_date" value="{{ request.GET.start_date }}" class="form-control"
+                               id="start_date">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="end_date" class="sr-only">تا تاریخ:</label>
+                        <input type="date" name="end_date" value="{{ request.GET.end_date }}" class="form-control"
+                               id="end_date">
+                    </div>
+                    {% if user.is_superuser %}
+                        <div class="form-group mx-sm-3 mb-2">
+                            <label for="status" class="sr-only">وضعیت:</label>
+                            <select name="status" class="form-control" id="status">
+                                <option value="">همه وضعیت‌ها</option>
+                                <option value="pub">منتشر شده</option>
+                                <option value="drf">پیشنویس</option>
+                            </select>
+                        </div>
                     {% endif %}
-                {% endif %}
-            {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>محتوایی برای نمایش وجود ندارد.</p>
-    {% endif %}
+                    <button type="submit" class="btn btn-primary mb-2">جستجو</button>
+                </form>
 
-    {% if page_obj > 1 %}
-        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.pervious_page_number }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>{% endif %}
-                <li class="page-item"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>{% endif %}
-            </ul>
-        </nav>
-    {% endif %}
+                {% if not user.user_type == 'behvarz' %}
+                    <a href="{% url 'instruction_create' %}">درج دستورالعمل جدید</a>
+                {% endif %}
+                <br><br>
+                <p>تعداد کل: {{ ins_count|translate_numbers }}</p>
+                {% if instructions %}
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>User</th>
+                            <th>نوع</th>
+                            <th>ش.نامه</th>
+                            <th>موضوع</th>
+                            <th>ضمیمه</th>
+                            <th>برای مراقب سلامت</th>
+                            <th>برای کارشناس</th>
+                            <th hidden="hidden">Is Active</th>
+                            {#                <th>عملیات</th>#}
+                            <th>وضعیت</th>
+                            <th>تاریخ ویرایش</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for instruction in instructions %}
+                            {% if instruction.is_active %}
+                                {% if instruction.status == 'pub' or user.is_superuser %}
+                                    <tr>
+                                        <td>{{ forloop.counter|translate_numbers }}</td>
+                                        <td>{{ instruction.user.username|translate_numbers }}</td>
+                                        <td>{{ instruction.type }}</td>
+                                        <td>{{ instruction.number|translate_numbers }}</td>
+                                        <td>
+                                            <a class="text-info"
+                                               href="{% url 'instruction_detail' instruction.id %}">{{ instruction.title|translate_numbers }}</a>
+                                            {% if instruction.datetime_created > last_visited %}
+                                                <strong class="new-item">جدید</strong>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if instruction.instruction_attach.count != 0 %}
+                                                {{ instruction.instruction_attach.count|translate_numbers }}
+                                            {% else %}
+                                                ندارد
+                                            {% endif %}
+                                        </td>
+                                        <td>{% if instruction.for_behvarz %}Yes{% else %}No{% endif %}</td>
+                                        <td>{% if instruction.for_expert %}Yes{% else %}No{% endif %}</td>
+                                        <td hidden="hidden">{% if instruction.is_active %}Yes{% else %}
+                                            No{% endif %}</td>
+                                        {#                    <td>#}
+                                        {##}
+                                        {#                        {% if instruction.status == 'drf' and instruction.user == request.user or user.is_superuser %}#}
+                                        {#                            <span>#}
+                                        {#                            <a class="text-green" href="{% url 'instruction_update' instruction.id %}">#}
+                                        {#                            <i style="font-size:16px;color: darkred" class="fa">&#xf044;</i>#}
+                                        {#                            </a>#}
+                                        {#                        {% endif %}#}
+                                        {#                    <span>|</span>#}
+                                        {#                        {% if user.is_superuser or instruction.user == request.user %}#}
+                                        {#                            <a class="text-danger" href="{% url 'instruction_delete' instruction.id %}">#}
+                                        {#                                <i style="font-size:16px;color:darkred" class="fa">&#xf00d;</i>#}
+                                        {#                            </a>#}
+                                        {#                            </span>#}
+                                        {#                        {% endif %}#}
+                                        {#                                            <span>|</span>#}
+                                        {#                                            <a class="text-info" href="{% url 'instruction_detail' instruction.id %}">جزئیات</a></td>#}
+                                        {#                    <td>#}
+                                        <td>
+                                            {% if instruction.status == 'pub' %}
+                                                <span class="badge badge-success">منتشر شده</span>
+                                            {% else %}
+                                                <span class="badge badge-info">پیشنویس</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ instruction.datetime_updated|to_jalali:'%Y/%m/%d'|translate_numbers }}
+                                            {% if instruction.datetime_created > last_visited %}
+                                                <td><strong>جدید</strong></td>
+                                            {% else %}
+                                                <td></td>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>محتوایی برای نمایش وجود ندارد.</p>
+                {% endif %}
+
+                {% if page_obj > 1 %}
+                    <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.pervious_page_number }}"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>{% endif %}
+                            <li class="page-item"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>{% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

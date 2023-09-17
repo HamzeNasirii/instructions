@@ -180,24 +180,24 @@
                                 <p>نگارش نامه</p>
                             </a>
                         </li>
-{#                        <li class="nav-item">#}
-{#                            <a href="{% url 'province_add_list' %}"#}
-{#                               class="nav-link {% if request.resolver_match.url_name == 'province_add_list' %}#}
-{#                            active#}
-{#                            {% endif %} ">#}
-{#                                <i class="fa fa-list nav-icon"></i>#}
-{#                                <p>نامه های ارسالی</p>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                        <li class="nav-item">#}
-{#                            <a href="{% url 'province_add_list' %}"#}
-{#                               class="nav-link {% if request.resolver_match.url_name == 'province_add_list' %}#}
-{#                            active#}
-{#                            {% endif %} ">#}
-{#                                <i class="fa fa-list nav-icon"></i>#}
-{#                                <p>نامه های دریافتی</p>#}
-{#                            </a>#}
-{#                        </li>#}
+                        {#                        <li class="nav-item">#}
+                        {#                            <a href="{% url 'province_add_list' %}"#}
+                        {#                               class="nav-link {% if request.resolver_match.url_name == 'province_add_list' %}#}
+                        {#                            active#}
+                        {#                            {% endif %} ">#}
+                        {#                                <i class="fa fa-list nav-icon"></i>#}
+                        {#                                <p>نامه های ارسالی</p>#}
+                        {#                            </a>#}
+                        {#                        </li>#}
+                        {#                        <li class="nav-item">#}
+                        {#                            <a href="{% url 'province_add_list' %}"#}
+                        {#                               class="nav-link {% if request.resolver_match.url_name == 'province_add_list' %}#}
+                        {#                            active#}
+                        {#                            {% endif %} ">#}
+                        {#                                <i class="fa fa-list nav-icon"></i>#}
+                        {#                                <p>نامه های دریافتی</p>#}
+                        {#                            </a>#}
+                        {#                        </li>#}
                     </ul>
                 </li>
 
@@ -232,7 +232,7 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                        <li class="nav-item">
+                            <li class="nav-item">
                                 <a href="{% url 'devicesList' %}"
                                    class="nav-link {% if request.resolver_match.url_name == 'devicesList' %}
                             active
@@ -250,15 +250,15 @@
                                     <p>آپلود گزارش دمای یخچال</p>
                                 </a>
                             </li>
-{#                        <li class="nav-item">#}
-{#                                <a href="{% url 'device-reports' device.id %}"#}
-{#                                   class="nav-link {% if request.resolver_match.url_name == 'device-reports' %}#}
-{#                            active#}
-{#                            {% endif %} ">#}
-{#                                    <i class="fa fa-list nav-icon"></i>#}
-{#                                    <p>ایجاد گزارش دمای یخچال</p>#}
-{#                                </a>#}
-{#                            </li>#}
+                            <li class="nav-item">
+                                <a href="{% url 'search_temp' %}"
+                                   class="nav-link {% if request.resolver_match.url_name == 'search_temp' %}
+                            active
+                            {% endif %} ">
+                                    <i class="fa fa-list nav-icon"></i>
+                                    <p>ایجاد گزارش</p>
+                                </a>
+                            </li>
                             {#                                                        <li class="nav-item">#}
                             {#                                                            <a href="{% url 'province_add_list' %}"#}
                             {#                                                               class="nav-link {% if request.resolver_match.url_name == 'province_add_list' %}#}

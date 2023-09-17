@@ -2,6 +2,7 @@ from datetime import datetime
 from django.utils import timezone
 import re
 
+from accounts.models import CustomUser
 from .models import *
 
 # ----------------------------------------------------------extract device information's----------------------
@@ -9,8 +10,7 @@ from .models import *
 from django.shortcuts import get_object_or_404
 from .models import Device
 
-
-def extract_device_data(file_content):
+def extract_device_data(file_content,username):
     pattern_device = r"Device:\s+(?P<Device>\w+\-\w+\s+\w+\-\w+\s+\d+)\s+" \
                      "Vers:\s+(?P<Vers>\d+\.\d+)\s+" \
                      "Fw Vers:\s+(?P<Fw_vers>\d+\.\d+\w+\d+\w+)\s+" \
@@ -44,6 +44,7 @@ def extract_device_data(file_content):
     print(match.group())
 
     if match:
+        existing_device.user = CustomUser.objects.get(username=username)
         existing_device.version = match.group('Vers')
         existing_device.fw_version = match.group('Fw_vers')
         existing_device.sensor_count = int(match.group('Sensor'))
@@ -68,6 +69,7 @@ def extract_device_data(file_content):
         existing_device.save()
     else:
         existing_device = Device()
+        existing_device.user = CustomUser.objects.get(username=username)
         existing_device.version = match.group('Vers')
         existing_device.fw_version = match.group('Fw_vers')
         existing_device.sensor_count = int(match.group('Sensor'))
@@ -92,7 +94,36 @@ def extract_device_data(file_content):
 
     return existing_device
 
+def extract_device_info_data(file_content, username):
 
+    Info_serial = re.search(r'Serial:\s+(?P<Serial>\d+)', file_content).group('Serial')
+    device = Device.objects.filter(serial=Info_serial).first()
+    existing_deviceInfo = DeviceInformation.objects.filter(device=device).first()
+
+    user = CustomUser.objects.get(username=username)
+
+    if not existing_deviceInfo:
+        existing_deviceInfo = DeviceInformation()
+        existing_deviceInfo.device = device
+
+    if existing_deviceInfo:
+        existing_deviceInfo.user = user
+        # existing_deviceInfo.province = user.province.name
+        # existing_deviceInfo.city = user.city.name
+        # health_center = user.health_center.first()
+        # existing_deviceInfo.health_center = health_center.name
+        # existing_deviceInfo.village = user.village.name
+        existing_deviceInfo.save()
+    else:
+        existing_deviceInfo.device = device
+        existing_deviceInfo.user = user
+        # existing_deviceInfo.province = user.province.name
+        # existing_deviceInfo.city = user.city.name
+        # existing_deviceInfo.health_center = user.health_center.name
+        # existing_deviceInfo.village = user.village.name
+        existing_deviceInfo.save()
+
+    return existing_deviceInfo
 # --------------------------------------------استخراج داده های Sensor-----------------------------------------
 def extract_sensor_data(file_content):
     sensor_pattern = r'Int Sensor:\s+Timeout:\s+(?P<Timeout>\d+),\s+' \
