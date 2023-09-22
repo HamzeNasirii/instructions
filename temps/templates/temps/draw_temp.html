@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load jalali_tags %}
 
 {% block title %}
 
@@ -14,6 +15,7 @@
             var dates = {{ dates|safe }};
             var maxTemps = {{ max_temps|safe }};
             var minTemps = {{ min_temps|safe }};
+            var avrgTemps = {{ avrg_temps|safe }};
 
             new Chart(ctx, {
                 type: 'line',
@@ -30,6 +32,12 @@
                             label: 'Min Temperature',
                             data: minTemps,
                             borderColor: 'blue',
+                            fill: false
+                        },
+                        {
+                            label: 'Average Temperature',
+                            data: avrgTemps,
+                            borderColor: 'green',
                             fill: false
                         }
                     ]

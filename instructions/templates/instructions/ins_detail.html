@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load ratings %}
 {% load persian_translation_tags %}
+{% load jalali_tags %}
+
 
 {% block title %}
 {% endblock %}
@@ -51,8 +53,8 @@
                     <td>{% if instruction.for_behvarz %}Yes{% else %}No{% endif %}</td>
                     <td>{% if instruction.for_expert %}Yes{% else %}No{% endif %}</td>
                     <td>{% if instruction.is_active %}Yes{% else %}No{% endif %}</td>
-                    <td>{{ instruction.datetime_created|translate_numbers }}</td>
-                    <td>{{ instruction.datetime_updated|translate_numbers }}</td>
+                    <td>{{ instruction.datetime_created|to_jalali:'%Y/%m/%d'|translate_numbers }}</td>
+                    <td>{{ instruction.datetime_updated|to_jalali:'%Y/%m/%d'|translate_numbers }}</td>
                 </tr>
                 </tbody>
             </table>

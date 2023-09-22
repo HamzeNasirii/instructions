@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load persian_translation_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-8 text-center mx-auto">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title mb-0 float-left">افزودن تگ</h3>
+            </div>
+
+            <div class="card-body py-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="id_name">نام تگ:</label>
+                    <input type="text" name="name" id="id_name">
+                    <button type="submit" class=" btn btn-outline-info">افزودن تگ</button>
+                </form>
+            </div>
+            <h1>لیست تگ‌ها</h1>
+
+            <ul>
+                {% for tag in tags %}
+                    {{ tag.name }}
+                    <a href="{% url 'delete_tag' tag.pk %}" class="delete-btn"><i
+                            class="fa-trash fa"></i></a>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+    <script>
+        $('.delete-btn').click(function () {
+            var pk = $(this).data('pk');
+            var data = JSON.stringify({
+                pk: pk
+            });
+
+            $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+                {#contentType: 'application/json',#}
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = response.redirect_url;
+                    } else {
+                        alert('خطا در حذف تگ');
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,7 +1,7 @@
 import os
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
 from django.http import HttpResponse, Http404
@@ -14,12 +14,46 @@ from datetime import datetime
 import qrcode
 import base64
 import io
-
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+import json
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from accounts.mixins import FieldsMixin, FormValidMixin, AuthAccInsrtInsMixin
-from .forms import InstructionForm, InsChangeForm
-from .models import Instruction, Attachment
+from .forms import InstructionForm, InsChangeForm, CreateTagForm
+from .models import Instruction, Attachment, Tag
 from django.views import View
+from django.views.generic.edit import FormView
+
+
+class CreateTagsView(LoginRequiredMixin, FormView):
+    form_class = CreateTagForm
+    template_name = 'instructions/create_tags.html'
+    success_url = reverse_lazy('create_tags')
+
+    def form_valid(self, form):
+        # بررسی تگ تکراری
+        name = form.cleaned_data['name']
+        if Tag.objects.filter(name=name).exists():
+            messages.error(self.request, 'تگ تکراری است و نمی‌توانید آن را اضافه کنید.')
+            return super().form_invalid(form)
+        else:
+            form.save()
+            messages.success(self.request,"تگ '{}' با موفقیت به لیست اضافه شد.".format(name))
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all()
+        return context
+
+
+def delete_tag(request, pk):
+    try:
+        tag = Tag.objects.get(pk=pk)
+        tag_name = tag.name
+        tag.delete()
+        messages.success(request, f"تگ '{tag_name}' با موفقیت حذف شد.")
+        return redirect('create_tags')
+    except Tag.DoesNotExist:
+        return JsonResponse({'error': 'Tag not found'}, status=404)
 
 
 class InstructionRestoreView(View):
@@ -166,6 +200,9 @@ class InsCreateView(LoginRequiredMixin, FieldsMixin, FormValidMixin, CreateView)
                     self.request, 'حداقل یکی از موارد بهورز یا کارشناس را انتخاب کنید.')
                 return super().form_invalid(form)
             form.save()
+
+            selected_tags = self.request.POST.getlist('tags')
+            form.instance.tags.set(selected_tags)
 
             attachments = self.request.FILES.getlist('attachment')
             for attachment in attachments:

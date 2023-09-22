@@ -10,7 +10,8 @@ from .models import *
 from django.shortcuts import get_object_or_404
 from .models import Device
 
-def extract_device_data(file_content,username):
+
+def extract_device_data(file_content, username):
     pattern_device = r"Device:\s+(?P<Device>\w+\-\w+\s+\w+\-\w+\s+\d+)\s+" \
                      "Vers:\s+(?P<Vers>\d+\.\d+)\s+" \
                      "Fw Vers:\s+(?P<Fw_vers>\d+\.\d+\w+\d+\w+)\s+" \
@@ -94,8 +95,8 @@ def extract_device_data(file_content,username):
 
     return existing_device
 
-def extract_device_info_data(file_content, username):
 
+def extract_device_info_data(file_content, username):
     Info_serial = re.search(r'Serial:\s+(?P<Serial>\d+)', file_content).group('Serial')
     device = Device.objects.filter(serial=Info_serial).first()
     existing_deviceInfo = DeviceInformation.objects.filter(device=device).first()
@@ -124,13 +125,14 @@ def extract_device_info_data(file_content, username):
         existing_deviceInfo.save()
 
     return existing_deviceInfo
+
+
 # --------------------------------------------استخراج داده های Sensor-----------------------------------------
 def extract_sensor_data(file_content):
     sensor_pattern = r'Int Sensor:\s+Timeout:\s+(?P<Timeout>\d+),\s+' \
                      r'Offset:\s+(?P<Offset>[+-]\d+\.\d+)'
 
     match = re.search(sensor_pattern, file_content)
-
 
     sens_serial = re.search(r'Serial:\s+(?P<Serial>\d+)', file_content).group('Serial')
     print("sens serial:", sens_serial)
@@ -228,6 +230,10 @@ def extract_report_data(file_content):
                     report.max_temp = m[3]
                     report.max_temp_time = m[4]
                     report.avg_temp = m[5]
+                    if float(m[3]) >= 8 or float(m[1]) <= 0:
+                        report.fault = 0
+                    else:
+                        report.fault = 1
                     report.alarm0_time = m[6]
                     report.alarm1_time = m[7]
                     report.timeout_time = m[8]
@@ -244,6 +250,10 @@ def extract_report_data(file_content):
                 report.max_temp = m[3]
                 report.max_temp_time = m[4]
                 report.avg_temp = m[5]
+                if float(m[3]) >= 8 or float(m[1]) <= 0:
+                    report.fault = 0
+                else:
+                    report.fault = 1
                 report.alarm0_time = m[6]
                 report.alarm1_time = m[7]
                 report.timeout_time = m[8]

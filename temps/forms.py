@@ -1,6 +1,6 @@
 from django import forms
-from jalali_date.fields import JalaliDateField, SplitJalaliDateTimeField
-from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
+from jalali_date.fields import JalaliDateField
+from jalali_date.widgets import AdminJalaliDateWidget
 
 
 class UploadFileForm(forms.Form):
@@ -8,5 +8,5 @@ class UploadFileForm(forms.Form):
 
 
 class DateRangeForm(forms.Form):
-    start_date = JalaliDateField(widget=AdminJalaliDateWidget)
-    end_date = JalaliDateField(widget=AdminJalaliDateWidget)
+    start_date = JalaliDateField(widget=forms.TextInput(attrs={'class': 'datepicker'}))
+    end_date = JalaliDateField(widget=forms.TextInput(attrs={'class': 'datepicker'}))

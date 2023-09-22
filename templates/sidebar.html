@@ -83,6 +83,18 @@
                                 </a>
                             </li>
                         {% endif %}
+                        {% if user.is_superuser %}
+                            <li class="nav-item">
+                                <a href="{% url "create_tags" %}"
+                                   class="nav-link {% if request.resolver_match.url_name == 'create_tags' %}
+                                   active
+                                    {% endif %}">
+                                    <i class="fa fa-trash nav-icon"></i>
+                                    {#                                    <i class="fa fa-list nav-icon"></i>#}
+                                    <p>افزودن تگ</p>
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </li>
 
@@ -250,15 +262,15 @@
                                     <p>آپلود گزارش دمای یخچال</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="{% url 'search_temp' %}"
-                                   class="nav-link {% if request.resolver_match.url_name == 'search_temp' %}
-                            active
-                            {% endif %} ">
-                                    <i class="fa fa-list nav-icon"></i>
-                                    <p>ایجاد گزارش</p>
-                                </a>
-                            </li>
+                            {#                            <li class="nav-item">#}
+                            {#                                <a href="{% url 'regression' %}"#}
+                            {#                                   class="nav-link {% if request.resolver_match.url_name == 'regression' %}#}
+                            {#                            active#}
+                            {#                            {% endif %} ">#}
+                            {#                                    <i class="fa fa-list nav-icon"></i>#}
+                            {#                                    <p>رگرسیون</p>#}
+                            {#                                </a>#}
+                            {#                            </li>#}
                             {#                                                        <li class="nav-item">#}
                             {#                                                            <a href="{% url 'province_add_list' %}"#}
                             {#                                                               class="nav-link {% if request.resolver_match.url_name == 'province_add_list' %}#}
