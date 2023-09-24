@@ -40,6 +40,9 @@ class Instruction(models.Model):
     for_behvarz = models.BooleanField(default=False)
     for_expert = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
+    tags = models.ManyToManyField('Tag', blank=True,null=True)
+
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, null=True, blank=True, default='drf')
 
     datetime_created = models.DateTimeField(auto_now_add=True)
@@ -54,6 +57,13 @@ class Instruction(models.Model):
     def increment_download_count(self):
         self.download_count += 1
         self.save()
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 
 class Attachment(models.Model):

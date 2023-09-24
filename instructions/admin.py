@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from .models import Instruction, IPAddress
+from .models import Instruction, IPAddress, Tag
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name', 'id')
+
 
 admin.site.register(IPAddress)
 
@@ -19,6 +25,6 @@ class InstructionAdmin(admin.ModelAdmin):
             'fields': ('for_behvarz', 'for_expert', 'is_active')
         }),
         ('تاریخچه', {
-            'fields': ('download_count','hits',)
+            'fields': ('download_count', 'hits',)
         })
     )

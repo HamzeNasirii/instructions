@@ -1,25 +1,69 @@
-import os
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
+from django.views.generic.edit import FormView
 from django.http import HttpResponse, Http404
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.utils import timezone
 from django.db import transaction
 from django.db.models import Q
-from datetime import datetime
 import qrcode
 import base64
 import io
 
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from accounts.mixins import FieldsMixin, FormValidMixin, AuthAccInsrtInsMixin
-from .forms import InstructionForm, InsChangeForm
-from .models import Instruction, Attachment
+from .forms import InstructionForm, InsChangeForm, CreateTagForm
+from .models import Instruction, Attachment, Tag
 from django.views import View
+
+
+class CreateTagsView(LoginRequiredMixin, FormView):
+    form_class = CreateTagForm
+    template_name = 'instructions/create_tags.html'
+    success_url = reverse_lazy('create_tags')
+
+    def form_valid(self, form):
+        # بررسی تگ تکراری
+        name = form.cleaned_data['name']
+        if Tag.objects.filter(name=name).exists():
+            messages.error(self.request, 'تگ تکراری است و نمی‌توانید آن را اضافه کنید.')
+            return super().form_invalid(form)
+        else:
+            form.save()
+            messages.success(self.request, "تگ '{}' با موفقیت به لیست اضافه شد.".format(name))
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all()
+        return context
+
+    """
+    Delete a tag by its primary key.
+
+    Parameters:
+        request (HttpRequest): The HTTP request object.
+        pk (int): The primary key of the tag to be deleted.
+
+    Returns:
+        HttpResponse or JsonResponse: If the tag is successfully deleted, a redirect response is returned.
+                                      If the tag is not found, a JSON response with an error message is returned.
+    """
+
+
+def delete_tag(request, pk):
+    try:
+        tag = Tag.objects.get(pk=pk)
+        tag_name = tag.name
+        tag.delete()
+        messages.success(request, f"تگ '{tag_name}' با موفقیت حذف شد.")
+        return redirect('create_tags')
+    except Tag.DoesNotExist:
+        messages.error(request, f"تگ '{tag_name}' یافت نشد.")
+        return redirect('create_tags')
 
 
 class InstructionRestoreView(View):
@@ -82,6 +126,8 @@ class InsDetailView(DetailView):
         context['qr_codes'] = qr_codes
         context['attachments'] = attachments
         context['attachment_download_counts'] = attachment_download_counts
+        tags = instruction.tags.all()
+        context['tags'] = tags
 
         return context
 
@@ -160,17 +206,34 @@ class InsCreateView(LoginRequiredMixin, FieldsMixin, FormValidMixin, CreateView)
 
     def form_valid(self, form):
         with transaction.atomic():
+
             form.instance.user = self.request.user
             if not form.cleaned_data['for_behvarz'] and not form.cleaned_data['for_expert']:
                 messages.error(
                     self.request, 'حداقل یکی از موارد بهورز یا کارشناس را انتخاب کنید.')
                 return super().form_invalid(form)
+
+            # Save instruction
+            form.save(commit=False)
             form.save()
+
+            # Get selected tag names from the form
+            selected_tags = [tag.rstrip(',') for tag in self.request.POST.getlist('selected_tags')]
+
+            # Add existing tags to the instruction
+            for tag_name in selected_tags:
+                try:
+                    tag = Tag.objects.get(name=tag_name)
+                    form.instance.tags.add(tag)
+                except Tag.DoesNotExist:
+                    messages.error(self.request, f'Tag with name "{tag_name}" does not exist.')
 
             attachments = self.request.FILES.getlist('attachment')
             for attachment in attachments:
                 Attachment.objects.create(
                     ins_attach=form.instance, file=attachment)
+
+            form.save()
 
             messages.success(self.request, 'محتوا با موفقیت ارسال شد.')
             return super().form_valid(form)
@@ -181,6 +244,16 @@ class InsCreateView(LoginRequiredMixin, FieldsMixin, FormValidMixin, CreateView)
                 messages.error(
                     self.request, f'خطا در فیلد {form.fields[field].label}: {error}')
         return self.render_to_response(self.get_context_data(form=form))
+
+
+def get_suggested_tags(request):
+    query = request.GET.get('query', '')
+    tags = Tag.objects.filter(name__icontains=query)[:10]  # فرض کنید تگ‌ها در مدل Tag ذخیره شده‌اند.
+    suggestions = [{
+        'name': tag.name,
+        'id': tag.id
+    } for tag in tags]
+    return JsonResponse({'suggestions': suggestions})
 
 
 class SelfInsListView(LoginRequiredMixin, ListView):
@@ -211,6 +284,9 @@ class SelfInsListView(LoginRequiredMixin, ListView):
         return self._download_counts
 
 
+from .utils import perform_search
+
+
 class InsListView(LoginRequiredMixin, ListView):
     model = Instruction
     template_name = 'instructions/ins_list.html'
@@ -219,29 +295,18 @@ class InsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = queryset.distinct()
 
         # Apply search filters
         search_query = self.request.GET.get('q')
+        tag_filter = self.request.GET.get('tag')
         type_filter = self.request.GET.get('type')
         start_date_filter = self.request.GET.get('start_date')
         end_date_filter = self.request.GET.get('end_date')
         status_filter = self.request.GET.get('status')
 
-        if search_query:
-            queryset = queryset.filter(Q(title__icontains=search_query) | Q(
-                description__icontains=search_query))
-
-        if type_filter:
-            queryset = queryset.filter(type=type_filter)
-
-        if start_date_filter:
-            queryset = queryset.filter(datetime_created__gte=start_date_filter)
-
-        if end_date_filter:
-            queryset = queryset.filter(datetime_created__lte=end_date_filter)
-
-        if status_filter:
-            queryset = queryset.filter(status=status_filter)
+        queryset = perform_search(queryset, search_query, tag_filter, type_filter, start_date_filter, end_date_filter,
+                                  status_filter, include_deleted=True)
 
         # Prefetch related instruction_attach and calculate download counts
         queryset = queryset.prefetch_related('instruction_attach')
@@ -262,6 +327,9 @@ class InsListView(LoginRequiredMixin, ListView):
         # Add type_choices to context
         form = InstructionForm()
         context['type_choices'] = form.fields['type'].choices
+
+        # Add Tags to context
+        context['tags'] = Tag.objects.all()
 
         # Add Count Installations to context
         context['ins_count'] = self.get_queryset().count()
@@ -298,7 +366,20 @@ class InsListViewDeleted(ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return Instruction.objects.filter(is_active=False)
+        queryset = super().get_queryset()
+        queryset = queryset.distinct()
+
+        # Apply search filters
+        search_query = self.request.GET.get('q')
+        tag_filter = self.request.GET.get('tag')
+        type_filter = self.request.GET.get('type')
+        start_date_filter = self.request.GET.get('start_date')
+        end_date_filter = self.request.GET.get('end_date')
+        status_filter = self.request.GET.get('status')
+
+        queryset = perform_search(queryset, search_query, tag_filter, type_filter, start_date_filter, end_date_filter,
+                                  status_filter, include_deleted=True)
+        return queryset.filter(is_active=False)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
