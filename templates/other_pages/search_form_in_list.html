@@ -40,11 +40,5 @@
         </div>
     {% endif %}
 
-    <span>
                     <button type="submit" class="btn btn-outline-primary">جستجو</button>
-        {% if not user.user_type == 'behvarz' %}
-            <a href="{% url 'instruction_create' %}"
-               class="btn btn-outline-primary">درج دستورالعمل جدید</a>
-        {% endif %}
-                </span>
 </form>

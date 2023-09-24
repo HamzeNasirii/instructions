@@ -1,9 +1,10 @@
 from django.urls import path
 
 from .views import InsListView, InsCreateView, InsUpdateView, ins_delete, InsListViewDeleted, InsDetailView, \
-    InstructionDownloadView, SelfInsListView, InstructionRestoreView, CreateTagsView, delete_tag
+    InstructionDownloadView, SelfInsListView, InstructionRestoreView, CreateTagsView, delete_tag, get_suggested_tags
 
 urlpatterns = [
+
     path('delete_tag/<int:pk>/', delete_tag, name='delete_tag'),
     path('listCreateTags/', CreateTagsView.as_view(), name='create_tags'),
 
@@ -13,6 +14,7 @@ urlpatterns = [
 
     path('<int:instruction_id>/download/', InstructionDownloadView.as_view(), name='instruction_download'),
 
+    path('get_suggested_tags/', get_suggested_tags, name='get_suggested_tags'),
     path('createIns/', InsCreateView.as_view(), name='instruction_create'),
 
     path('updateIns/<int:pk>', InsUpdateView.as_view(), name='instruction_update'),

@@ -26,10 +26,15 @@ class InsChangeForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple(),
         label='فایل‌های ضمیمه'
     )
+    tags = forms.ModelChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False,
+    )
 
     class Meta:
         model = Instruction
-        fields = {'type', 'user', 'status', 'title', 'description', 'number', 'for_behvarz', 'for_expert','tags'}
+        fields = {'type', 'user', 'status', 'title', 'description', 'number', 'for_behvarz', 'for_expert', 'tags'}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -38,7 +43,11 @@ class InsChangeForm(forms.ModelForm):
 
 
 class InstructionForm(forms.ModelForm):
-    tags = forms.CharField(required=False)
+    tags = forms.ModelChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False,
+    )
     attachments = forms.ModelMultipleChoiceField(
         queryset=Attachment.objects.all(),
         widget=forms.CheckboxSelectMultiple,
